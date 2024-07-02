@@ -1,0 +1,94 @@
+//  ॐ नमः शिवाय //
+/* JAI MAHAKAL */
+#include <bits/stdc++.h>
+using namespace std;
+#define ff first
+#define ss second
+#define pb push_back
+#define ppb pop_back
+#define ll long long
+#define vi vector<ll>
+#define MOD 1000000007
+#define MOD1 998244353
+#define vii vector<pii>
+#define mii map <ll, ll>
+#define pii pair<ll, ll>
+#define SORT(x) is_sorted(all(x))
+#define MAX(x) *max_element(all(x))
+#define MIN(x) *min_element(all(x))
+#define all(x) (x).begin(), (x).end()
+#define forn(i,x,y) for(ll i=x;i<y;i++)
+#define SUM(x)  accumulate(all(x), 0LL)
+#define input(v,n) for(ll i=0;i<n;i++)cin>>v[i];
+#define printv(vec)  for(auto it : vec)cout<<it<<" ";
+
+/***/
+
+bool is_pali(string s){string t =s;reverse(all(s));return (s==t);}
+bool isPowerOfTwo(ll x){if(x<0) return false;return x && (!(x & (x - 1)));}
+bool is_prime(ll n){if(n==1)return false;for(ll i =2;i*i<=n ;i++){if(n%i==0)return false;}return true;}
+ll binpow(ll a,ll b){if(b==0)return 1;ll res=binpow(a,b/2);if(b%2)return res*res*a;else return res*res;}
+ll power(ll v,ll B,ll C){if(v==0)return 0;if(B==0)return 1;ll y;if(B%2==0){y=power(v,B/2,C);y=(y*y)%C;}
+else{y=v%C;y=(y*power(v,B-1,C)%C)%C;}return(ll)((y+C)%C);}
+ll count_bit(ll a){ll ans=0;while(a>0){if(a&1){ans++;}a/=2;}return ans;}
+bool is_sq(ll n){ll low=1,high=1e9;ll ans=0;while(low<=high){ll mid=(low+high)/2;
+if(mid*mid<=n){ans=mid;low=mid+1;}else high=mid-1;}return(ans*ans==n);}
+
+/**/
+void dfs( ll node , vector<vi> &adj , ll parent , vi &dis)
+{
+  if(parent != -1)dis[node] = dis[parent]+1;
+  else dis[node]=0;
+  for(auto it : adj[node])
+  {
+    if(it!=parent)
+    dfs(it,adj,node,dis);
+  }
+}
+
+
+void solve()
+{  
+/* Finding distances is nothing but finding the levels considering our node as root */
+ll n;
+cin>>n;
+vector< vi > adj(n+1,vector<ll>());
+forn(i,0,n-1)
+{
+  ll a,b;cin>>a>>b;
+  adj[a].pb(b);
+  adj[b].pb(a);
+}
+
+vi dis(n+1,0) , dis1(n+1,0) , dis2(n+1,0);
+
+dfs(1,adj,-1,dis);
+ll y = 1;
+forn(i,1,n+1)
+{
+  if(dis[i]>dis[y])y=i;
+}
+
+
+dfs(y,adj,-1,dis1);
+// y  is the one end of the diameter
+ll z = y;
+forn(i,1,n+1)
+{
+  if(dis1[i]>dis1[z])z=i;
+}
+
+// now from z find  the distance of all node
+dfs(z,adj,-1,dis2);
+// z is the another end of the diameter
+cout<<dis2[y] + 1<<endl;
+}
+
+int main()
+{
+       ll t =1;
+     //  cin>>t;
+       while(t--)
+       solve();
+}
+
